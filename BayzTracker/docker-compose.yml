@@ -1,0 +1,29 @@
+version: '3.1'
+services:
+  springboot-app:
+    container_name: bayz-tracker
+    build: ./
+    ports: 
+      - "8080:8080"
+    depends_on:
+        - postgresqldb
+    networks:
+      - mynet
+  postgresqldb:
+    image: postgres
+    container_name: postgre
+    hostname: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 1s
+    environment:
+      - 'POSTGRES_PASSWORD=sezer'
+      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_DB=currency'
+    ports:
+      - "5435:5435"
+    networks:
+    - mynet
+networks:
+  mynet:
+    driver: bridge
